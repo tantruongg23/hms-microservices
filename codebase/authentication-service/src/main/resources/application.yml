@@ -1,0 +1,39 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: authentication-service
+  profiles:
+    active: @spring.profiles.active@
+
+grpc:
+  server:
+    port: 9091
+    inProcessName: auth-server
+
+management: # Health check
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+        # include: health,prometheus,metrics
+#  endpoint:
+#    health:
+#      probes:
+#        enabled: true
+#  health:
+#    livenessState:
+#      enabled: true
+#    readinessState:
+#      enabled: true
+#  prometheus:
+#    metrics:
+#      export:
+#        step: 5s
+#        enabled: true
+
+logging:
+  level:
+    root: INFO
+    web: INFO

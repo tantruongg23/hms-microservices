@@ -1,0 +1,36 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: order-service
+  profiles:
+    active: @spring.profiles.active@
+
+management: # Health check
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+#  endpoint:
+#    health:
+#      probes:
+#        enabled: true
+#  health:
+#    livenessState:
+#      enabled: true
+#    readinessState:
+#      enabled: true
+#  prometheus:
+#    metrics:
+#      export:
+#        step: 5s
+#        enabled: true
+
+logging:
+  level:
+    root: INFO
+    web: OFF
+    org:
+      apache:
+        kafka: OFF

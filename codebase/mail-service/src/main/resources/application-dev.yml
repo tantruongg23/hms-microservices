@@ -1,0 +1,21 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  devtools:
+    add-properties: true
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVER:localhost:29092}
+
+# API document setting
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+openapi:
+  service:
+    api-docs: mail-service
+    server: http://localhost:${server.port}
+    title: Mail service
+    version: 1.0.0
