@@ -1,5 +1,6 @@
 package vn.tayjava.service;
 
+import vn.tayjava.controller.request.AppointmentCreationRequest;
 import vn.tayjava.controller.request.ProductCreationRequest;
 import vn.tayjava.controller.request.ProductUpdateRequest;
 import vn.tayjava.model.ProductDocument;
@@ -7,6 +8,8 @@ import vn.tayjava.model.ProductDocument;
 import java.util.List;
 
 public interface AppointmentService {
+
+    long create(AppointmentCreationRequest request);
 
     long addProduct(ProductCreationRequest request);
 
