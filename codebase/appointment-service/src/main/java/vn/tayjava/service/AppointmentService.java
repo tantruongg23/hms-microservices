@@ -1,17 +1,17 @@
 package vn.tayjava.service;
 
-import java.util.List;
-
 import vn.tayjava.common.enumerate.AppointmentStatus;
-import vn.tayjava.controller.request.AppointmentCreationRequest;
+import vn.tayjava.controller.request.AppointmentCreationReq;
+import vn.tayjava.controller.response.PageResponse;
 import vn.tayjava.model.Appointment;
 
 public interface AppointmentService {
 
-    long create(AppointmentCreationRequest request);
+    Appointment create(AppointmentCreationReq request);
 
     Appointment updateAppointmentStatus(long id, AppointmentStatus status);
 
-    List<Appointment> getAppointmentsByPatientId(Long patientId);
+    PageResponse<Appointment> getAppointmentsByPatientId(Long patientId, int pageNo, int pageSize);
 
+    PageResponse<Appointment> getAllAppointments(int pageNo, int pageSize);
 }

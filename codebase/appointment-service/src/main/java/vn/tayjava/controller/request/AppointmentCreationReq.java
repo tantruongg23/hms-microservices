@@ -13,15 +13,15 @@ import lombok.Getter;
 import lombok.ToString;
 import vn.tayjava.common.enumerate.ExaminationType;
 import vn.tayjava.common.enumerate.PeriodEnum;
-import vn.tayjava.model.Doctor;
-import vn.tayjava.model.Specialty;
 
 @Getter
 @ToString
-public class AppointmentCreationRequest implements Serializable {
+public class AppointmentCreationReq implements Serializable {
 
     @NotNull(message = "Chọn chuyên khoa")
     private long specialtyId;
+
+    private String specialtyName;
 
     @Enumerated(EnumType.STRING)
     @NotBlank(message = "Chọn dịch vụ khám")

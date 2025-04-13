@@ -1,18 +1,14 @@
 package vn.tayjava.controller;
 
-import java.util.Date;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import vn.tayjava.common.enumerate.PeriodEnum;
 import vn.tayjava.controller.request.DoctorScheduleCreationReq;
 import vn.tayjava.controller.response.ResponseData;
 import vn.tayjava.controller.response.ResponseError;

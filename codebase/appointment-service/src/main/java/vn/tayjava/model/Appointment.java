@@ -3,29 +3,18 @@ package vn.tayjava.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import vn.tayjava.common.enumerate.AppointmentStatus;
-import vn.tayjava.common.enumerate.BookingTypeEnum;
 import vn.tayjava.common.enumerate.ExaminationType;
 import vn.tayjava.common.enumerate.PeriodEnum;
 
@@ -51,14 +40,19 @@ public class Appointment extends AbstractEntity implements Serializable {
     @Column(name = "period", nullable = false)
     private PeriodEnum period;
 
-    // External references (soft foreign keys)
+    // Optional denormalized data
+    @Column(name = "specialty_id")
+    private Long specialtyId;
+
+    @Column(name = "specialty_name")
+    private String specialtyName;
+
     @Column(name = "doctor_id", nullable = false)
     private Long doctorId;
 
     @Column(name = "patient_id", nullable = false)
     private Long patientId;
 
-    // Optional denormalized data
     @Column(name = "doctor_name")
     private String doctorName;
 
@@ -72,5 +66,4 @@ public class Appointment extends AbstractEntity implements Serializable {
 
     @Column(name = "symptoms", columnDefinition = "TEXT")
     private String symptoms;
-
 }
