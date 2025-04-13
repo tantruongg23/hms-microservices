@@ -1,36 +1,47 @@
 package vn.tayjava.controller.request;
 
 import java.io.Serializable;
-
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import java.util.Date;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import vn.tayjava.common.enumerate.AppointmentStatus;
-import vn.tayjava.common.enumerate.BookingTypeEnum;
+import lombok.ToString;
 import vn.tayjava.common.enumerate.ExaminationType;
+import vn.tayjava.common.enumerate.PeriodEnum;
 import vn.tayjava.model.Doctor;
-import vn.tayjava.model.DoctorSchedule;
-import vn.tayjava.model.Patient;
+import vn.tayjava.model.Specialty;
 
 @Getter
+@ToString
 public class AppointmentCreationRequest implements Serializable {
-    private String department;
+
+    @NotNull(message = "Chọn chuyên khoa")
+    private long specialtyId;
 
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @NotBlank(message = "Chọn dịch vụ khám")
     private ExaminationType examinationType;
 
+    @NotNull(message = "Chọn bác sĩ")
+    private long doctorId;
+
+    @Temporal(TemporalType.DATE)
+    @NotNull(message = "Chọn ngày muốn khám")
+    private Date appointmentDate;
+
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    private AppointmentStatus status;
+    @NotNull(message = "Chọn khung giờ muốn khám")
+    private PeriodEnum period;
 
-    private DoctorSchedule doctorSchedule;
+    @NotBlank(message = "Nhập vấn đề sức khỏe cần khám")
+    private String symptoms;
 
-    private String note;
-
-    private Patient patient;
+    @NotNull(message = "Điền thông tin bệnh nhân")
+    private PatientCreationReq patient;
 
 }

@@ -1,31 +1,20 @@
-package vn.tayjava.model;
+package vn.tayjava.controller.request;
 
+import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import vn.tayjava.common.enumerate.GenderEnum;
 import vn.tayjava.util.validator.PhoneNumber;
 
-@Entity
-@Table(name = "patients")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class Patient extends AbstractEntity {
+public class PatientCreationReq {
     @NotBlank(message = "Name must be filled, > 5 character")
     private String fullName;
     @PhoneNumber(message = "Phone is invalid format")
@@ -52,5 +41,4 @@ public class Patient extends AbstractEntity {
 
     @NotBlank(message = "Street must not be empty")
     private String street;
-
 }

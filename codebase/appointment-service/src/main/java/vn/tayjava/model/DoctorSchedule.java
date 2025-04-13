@@ -1,21 +1,23 @@
 package vn.tayjava.model;
 
-import java.util.List;
+import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import vn.tayjava.common.enumerate.PeriodEnum;
 
 @Entity
 @Table(name = "doctor_schedule")
@@ -23,21 +25,19 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DoctorSchedule {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class DoctorSchedule extends AbstractEntity {
 
-    @ManyToOne
-    @JoinColumn(name = "doctor_id")
-    private Doctor doctor;
+    @Column(name = "doctor_id", nullable = false)
+    private Long doctorId;
 
-    @ManyToOne
-    @JoinColumn(name = "time_slot_id")
-    private TimeSlot timeSlot;
+    @Temporal(TemporalType.DATE)
+    @NotNull
+    private Date date;
 
-    // // @OneToMany(mappedBy = "doctorSchedule")
-    // // @JsonIgnore
+    @Enumerated(EnumType.STRING)
+    // @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    private PeriodEnum period;
 
-    // private List<Appointment> appointment;
+    @Column(name = "available", nullable = false)
+    private boolean available = true;
 }

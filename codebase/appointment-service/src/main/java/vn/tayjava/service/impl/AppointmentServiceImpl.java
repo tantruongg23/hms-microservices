@@ -2,25 +2,25 @@ package vn.tayjava.service.impl;
 
 import java.util.List;
 
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import vn.tayjava.common.enumerate.AppointmentStatus;
-import vn.tayjava.common.enumerate.ExaminationType;
 import vn.tayjava.controller.request.AppointmentCreationRequest;
-import vn.tayjava.controller.request.ProductCreationRequest;
-import vn.tayjava.controller.request.ProductUpdateRequest;
+import vn.tayjava.exception.IdInvalidException;
 import vn.tayjava.exception.InvalidDataException;
 import vn.tayjava.model.Appointment;
-import vn.tayjava.model.DoctorSchedule;
+import vn.tayjava.model.Doctor;
 import vn.tayjava.model.Patient;
-import vn.tayjava.model.ProductDocument;
 import vn.tayjava.repository.AppointmentRepository;
+import vn.tayjava.repository.DoctorRepository;
 import vn.tayjava.repository.DoctorScheduleRepository;
 import vn.tayjava.repository.PatientRepository;
 import vn.tayjava.service.AppointmentService;
+import vn.tayjava.service.DoctorService;
+import vn.tayjava.service.PatientService;
 
 @Service
 @Slf4j(topic = "APPOINTMENT-SERVICE")
@@ -28,96 +28,74 @@ import vn.tayjava.service.AppointmentService;
 public class AppointmentServiceImpl implements AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
-    private final PatientRepository patientRepository;
+
     private final DoctorScheduleRepository doctorScheduleRepository;
 
-    @Override
-    public long addProduct(ProductCreationRequest request) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addProduct'");
-    }
+    private final PatientService patientService;
 
-    @Override
-    public List<ProductDocument> searchProducts(String name) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchProducts'");
-    }
-
-    @Override
-    public void updateUser(ProductUpdateRequest product) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateUser'");
-    }
-
-    @Override
-    public void deleteProduct(long productId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteProduct'");
-    }
+    private final DoctorService doctorService;
 
     @Override
     public long create(AppointmentCreationRequest request) {
 
         // check doctor schedule
         if (request == null) {
-            throw new InvalidDataException("Data must not be null");
+            throw new InvalidDataException("Dữ liệu không hợp lệ");
         }
 
-        if (request.getDoctorSchedule() == null) {
-            throw new InvalidDataException("Doctor schedule must not be null");
-        }
+        // check doctor & time
+        if (!this.doctorScheduleRepository
+                .existsByDoctorIdAndDateAndPeriod(
+                        request.getDoctorId(),
+                        request.getAppointmentDate(),
+                        request.getPeriod())) {
 
-        if (request.getDoctorSchedule().getDoctor() == null) {
-            throw new InvalidDataException("Doctor must not be null");
-
-        }
-
-        if (request.getDoctorSchedule().getTimeSlot() == null) {
-            throw new InvalidDataException("Time slot must not be null");
-
+            throw new InvalidDataException("Vui lòng chọn lịch hẹn khác");
         }
 
         // check patient
         if (request.getPatient() == null) {
-            throw new InvalidDataException("Patient must not be null");
-
+            throw new InvalidDataException("Dữ liệu bệnh nhân không hợp lệ");
         }
 
-        // check phone exists
-        Patient existedPatient = this.patientRepository.findByPhone(request.getPatient().getPhone());
-        if (existedPatient == null) {
-            existedPatient = new Patient();
-            existedPatient.setPhone(request.getPatient().getPhone());
-            existedPatient.setFullName(request.getPatient().getFullName());
-            existedPatient.setDob(request.getPatient().getDob());
-            // check if id exists
-            existedPatient.setCustomerId(request.getPatient().getCustomerId());
-            existedPatient.setGender(request.getPatient().getGender());
-            existedPatient.setNationality(request.getPatient().getNationality());
-            existedPatient.setAddress(request.getPatient().getAddress());
+        // call patient service
+        long patientId = this.patientService.save(request.getPatient());
 
-            existedPatient = this.patientRepository.save(existedPatient);
-        } else {
-            // update address if change
-
-        }
-
-        DoctorSchedule doctorSchedule = doctorScheduleRepository
-                .findByDoctorIdAndTimeSlotId(
-                        request.getDoctorSchedule().getDoctor().getId(),
-                        request.getDoctorSchedule().getTimeSlot().getId())
-                .orElseThrow(() -> new InvalidDataException("Doctor schedule is wrong"));
+        // call doctor service
+        long doctorId = this.doctorService.findById(request.getDoctorId());
 
         Appointment appointment = new Appointment();
-        appointment.setStatus(AppointmentStatus.PENDING);
         appointment.setExaminationType(request.getExaminationType());
-        appointment.setDoctorSchedule(doctorSchedule);
-        appointment.setNote(request.getNote());
-        appointment.setPatient(existedPatient);
+        appointment.setDoctorId(doctorId);
+        appointment.setAppointmentDate(request.getAppointmentDate());
+        appointment.setPeriod(request.getPeriod());
+        appointment.setSymptoms(request.getSymptoms());
+        appointment.setPatientId(patientId);
+        appointment.setStatus(AppointmentStatus.PENDING);
 
         appointment = this.appointmentRepository.save(appointment);
+
         log.info("Appointment has saved successfully: {}", appointment);
         return appointment.getId();
+    }
+
+    @Override
+    @Transactional
+    public Appointment updateAppointmentStatus(long id, AppointmentStatus status) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+        appointment.setStatus(status);
+        return appointmentRepository.save(appointment);
+    }
+
+    @Override
+    public List<Appointment> getAppointmentsByPatientId(Long patientId) {
+        // check patient id
+
+        //
+
+        return appointmentRepository.findByPatientId(patientId);
     }
 
 }

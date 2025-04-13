@@ -1,21 +1,17 @@
 package vn.tayjava.service;
 
-import vn.tayjava.controller.request.AppointmentCreationRequest;
-import vn.tayjava.controller.request.ProductCreationRequest;
-import vn.tayjava.controller.request.ProductUpdateRequest;
-import vn.tayjava.model.ProductDocument;
-
 import java.util.List;
+
+import vn.tayjava.common.enumerate.AppointmentStatus;
+import vn.tayjava.controller.request.AppointmentCreationRequest;
+import vn.tayjava.model.Appointment;
 
 public interface AppointmentService {
 
     long create(AppointmentCreationRequest request);
 
-    long addProduct(ProductCreationRequest request);
+    Appointment updateAppointmentStatus(long id, AppointmentStatus status);
 
-    List<ProductDocument> searchProducts(String name);
+    List<Appointment> getAppointmentsByPatientId(Long patientId);
 
-    void updateUser(ProductUpdateRequest product);
-
-    void deleteProduct(long productId);
 }

@@ -20,10 +20,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Doctor extends AbstractEntity {
 
-    private String name;
+    private String fullName;
 
-    @OneToMany(mappedBy = "doctor")
-    private List<DoctorSchedule> doctorSchedules;
+    private String title;
 
     @ManyToOne
     @JoinColumn(name = "specialty_id")
