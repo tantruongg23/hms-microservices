@@ -1,6 +1,7 @@
 package vn.tayjava.model;
 
 import java.io.Serializable;
+import java.time.LocalTime;
 import java.util.Date;
 
 import jakarta.persistence.Column;
@@ -39,6 +40,10 @@ public class Appointment extends AbstractEntity implements Serializable {
     // @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "period", nullable = false)
     private PeriodEnum period;
+
+    private LocalTime startHour;
+
+    private LocalTime endHour;
 
     // Optional denormalized data
     @Column(name = "specialty_id")

@@ -67,6 +67,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setDoctorId(doctorId);
         appointment.setAppointmentDate(request.getAppointmentDate());
         appointment.setPeriod(request.getPeriod());
+        appointment.setStartHour(request.getStartHour());
+        appointment.setEndHour(request.getEndHour());
         appointment.setSymptoms(request.getSymptoms());
         appointment.setPatientId(patientId);
         appointment.setStatus(AppointmentStatus.PENDING);

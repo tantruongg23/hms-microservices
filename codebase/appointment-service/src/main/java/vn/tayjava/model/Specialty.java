@@ -2,6 +2,7 @@ package vn.tayjava.model;
 
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
@@ -19,6 +20,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Specialty extends AbstractEntity {
 
+    @Column(name = "name", unique = true)
     private String name;
 
     private String code;

@@ -1,6 +1,7 @@
 package vn.tayjava.controller.request;
 
 import java.io.Serializable;
+import java.time.LocalTime;
 import java.util.Date;
 
 import jakarta.persistence.EnumType;
@@ -37,6 +38,9 @@ public class AppointmentCreationReq implements Serializable {
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Chọn khung giờ muốn khám")
     private PeriodEnum period;
+
+    private LocalTime startHour;
+    private LocalTime endHour;
 
     @NotBlank(message = "Nhập vấn đề sức khỏe cần khám")
     private String symptoms;

@@ -1,6 +1,7 @@
 package vn.tayjava.controller.request;
 
 import java.io.Serializable;
+import java.time.LocalTime;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -22,7 +23,11 @@ public class DoctorScheduleCreationReq implements Serializable {
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date date;
+
     // @NotNull(message = "Vui lòng chọn khung giờ khám")
     private PeriodEnum period;
 
+    private LocalTime startHour;
+
+    private LocalTime endHour;
 }

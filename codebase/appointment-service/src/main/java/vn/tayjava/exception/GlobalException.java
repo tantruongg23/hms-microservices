@@ -8,6 +8,8 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -71,6 +73,21 @@ public class GlobalException {
             error.setError("Invalid data");
             error.setMessages(message);
         }
+
+        return error;
+    }
+
+    @ExceptionHandler({ Exception.class })
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Error handleException(Exception e, WebRequest request) {
+        log.error(e.getMessage(), e);
+
+        Error error = new Error();
+        error.setTimestamp(new Date());
+        error.setStatus(BAD_REQUEST.value());
+        error.setPath(request.getDescription(false).replace("uri=", ""));
+        error.setError("INTERNAL SERVER ERROR");
+        error.setMessages(e.getMessage());
 
         return error;
     }

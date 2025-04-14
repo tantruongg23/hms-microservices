@@ -1,5 +1,6 @@
 package vn.tayjava.model;
 
+import java.time.LocalTime;
 import java.util.Date;
 
 import org.hibernate.annotations.JdbcTypeCode;
@@ -32,11 +33,15 @@ public class DoctorSchedule extends AbstractEntity {
 
     @Temporal(TemporalType.DATE)
     @NotNull
+    @Column(name = "date")
     private Date date;
 
     @Enumerated(EnumType.STRING)
     // @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private PeriodEnum period;
+
+    private LocalTime startHour;
+    private LocalTime endHour;
 
     @Column(name = "available", nullable = false)
     private boolean available = true;
